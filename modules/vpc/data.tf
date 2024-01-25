@@ -1,3 +1,3 @@
-data "aws_vps" "default" {
+data "aws_vpc" "default" {
   default = true
 }
