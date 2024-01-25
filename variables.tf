@@ -1,4 +1,9 @@
 variable "env" {}
 variable "vpc" {}
 variable "project_name" {}
-variable "subnets" {}
+variable "vpc_cidr" {}
+variable "public_subnets_cidr" {}
+variable "web_subnets_cidr" {}
+variable "app_subnets_cidr" {}
+variable "db_subnets_cidr" {}
+variable "az" {}
