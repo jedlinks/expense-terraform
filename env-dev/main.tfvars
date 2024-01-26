@@ -6,7 +6,6 @@ acm_arn             = "arn:aws:acm:us-east-1:633854890313:certificate/0577b271-2
 zone_id             = "Z05050322P8QFCN8M8LU9"
 
 
-
 vpc_cidr            = "10.80.0.0/22"
 public_subnets_cidr = ["10.80.0.0/25", "10.80.0.128/25"]
 web_subnets_cidr    = ["10.80.1.0/25", "10.80.1.128/25"]
