@@ -30,3 +30,70 @@ module "rds" {
   sg_cidr_blocks = var.app_subnets_cidr
 }
 
+module "backend" {
+  source = "./modules/app"
+
+  app_port            = var.backend_app_port
+  bastion_cidrs       = var.bastion_cidrs
+  component           = "backend"
+  env                 = var.env
+  instance_capacity   = var.backend_instance_capacity
+  instance_type       = var.backend_instance_type
+  project_name        = var.project_name
+  sg_cidr_blocks      = var.app_subnets_cidr
+  vpc_id              = module.vpc.vpc_id
+  vpc_zone_identifier = module.vpc.app_subnets_ids
+}
+
+module "frontend" {
+  source = "./modules/app"
+
+  app_port            = var.frontend_app_port
+  bastion_cidrs       = var.bastion_cidrs
+  component           = "frontend"
+  env                 = var.env
+  instance_capacity   = var.frontend_instance_capacity
+  instance_type       = var.frontend_instance_type
+  project_name        = var.project_name
+  sg_cidr_blocks      = var.public_subnets_cidr
+  vpc_id              = module.vpc.vpc_id
+  vpc_zone_identifier = module.vpc.web_subnets_ids
+}
+
+module "public-alb" {
+  source = "./modules/alb"
+
+  alb_name       = "public"
+  internal       = false
+  sg_cidr_blocks = ["0.0.0.0/0"]
+  dns_name       = "frontend"
+
+  project_name = var.project_name
+  env          = var.env
+  acm_arn      = var.acm_arn
+  zone_id      = var.zone_id
+
+  subnets          = module.vpc.public_subnets_ids
+  vpc_id           = module.vpc.vpc_id
+  target_group_arn = module.frontend.target_group_arn
+
+}
+
+module "private-alb" {
+  source = "./modules/alb"
+
+  alb_name = "private"
+  internal = true
+  dns_name = "backend"
+
+  sg_cidr_blocks = var.web_subnets_cidr
+  project_name   = var.project_name
+  env            = var.env
+  acm_arn        = var.acm_arn
+  zone_id        = var.zone_id
+
+  subnets          = module.vpc.app_subnets_ids
+  vpc_id           = module.vpc.vpc_id
+  target_group_arn = module.backend.target_group_arn
+
+}
