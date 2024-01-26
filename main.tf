@@ -10,3 +10,23 @@ module "vpc" {
   env          = var.env
   project_name = var.project_name
 }
+
+module "rds" {
+  source = "./modules/rds"
+
+  allocated_storage = var.rds_allocated_storage
+  dbname            = var.rds_dbname
+  engine            = var.rds_engine
+  engine_version    = var.rds_engine_version
+  family            = var.rds_family
+  instance_class    = var.rds_instance_class
+
+  env          = var.env
+  project_name = var.project_name
+  kms_key_id   = var.kms_key_id
+
+  subnet_ids     = module.vpc.app_subnets_ids
+  vpc_id         = module.vpc.vpc_id
+  sg_cidr_blocks = var.app_subnets_cidr
+}
+
