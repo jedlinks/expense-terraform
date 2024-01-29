@@ -5,7 +5,7 @@ resource "aws_db_parameter_group" "main" {
 
 resource "aws_db_subnet_group" "main" {
   name       = "${var.env}-${var.project_name}-sg"
-  subnet_ids = var.subnet_ids
+  subnet_ids = "aws_subnets.app.*.id"
 
   tags = {
     Name = "${var.env}-${var.project_name}-sg"
