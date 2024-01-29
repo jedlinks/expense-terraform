@@ -37,7 +37,7 @@ resource "aws_lb" "main" {
   internal           = var.internal
   load_balancer_type = "application"
   security_groups    = [aws_security_group.main.id]
-  subnets            = "aws_subnets.app.*.id"
+  subnets            = var.subnets
 
   tags = {
     Name = local.name

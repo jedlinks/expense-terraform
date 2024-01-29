@@ -5,7 +5,7 @@ resource "aws_db_parameter_group" "main" {
 
 resource "aws_db_subnet_group" "main" {
   name       = "${var.env}-${var.project_name}-sg"
-  subnet_ids = "aws_subnets.app.*.id"
+  subnet_ids = var.subnet_ids
 
   tags = {
     Name = "${var.env}-${var.project_name}-sg"
@@ -23,7 +23,6 @@ resource "aws_security_group" "main" {
     protocol    = "tcp"
     cidr_blocks = var.sg_cidr_blocks
   }
-
 
   egress {
     from_port        = 0
