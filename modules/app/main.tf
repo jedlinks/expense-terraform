@@ -111,12 +111,14 @@ resource "aws_iam_role" "main" {
           "Sid" : "GetParameter",
           "Effect" : "Allow",
           "Action" : [
+            "kms:Decrypt",
             "ssm:GetParameterHistory",
             "ssm:GetParametersByPath",
             "ssm:GetParameters",
             "ssm:GetParameter"
           ],
           "Resource" : concat([
+            "arn:aws:kms:us-east-1:633854890313:key/a2c0e3e4-e10c-41db-bc09-21c79c747da6",
             "arn:aws:ssm:us-east-1:633854890313:parameter/${var.env}.${var.project_name}.${var.component}.*",
           ], var.parameters)
         },
