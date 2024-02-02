@@ -99,12 +99,12 @@ resource "aws_iam_role" "main" {
   name = "${local.name}-role"
 
   assume_role_policy = jsonencode({
-    Version = "2012-10-17"
+    Version   = "2012-10-17"
     Statement = [
       {
-        Action = "sts:AssumeRole"
-        Effect = "Allow"
-        Sid    = ""
+        Action    = "sts:AssumeRole"
+        Effect    = "Allow"
+        Sid       = ""
         Principal = {
           Service = "ec2.amazonaws.com"
         }
@@ -116,31 +116,36 @@ resource "aws_iam_role" "main" {
     name = "parameter-store"
 
     policy = jsonencode({
-      "Version": "2012-10-17",
-      "Statement": [
+      "Version" : "2012-10-17",
+      "Statement" : [
         {
-          "Sid": "GetParameter",
-          "Effect": "Allow",
-          "Action": [
+          "Sid" : "GetParameter",
+          "Effect" : "Allow",
+          "Action" : [
             "ssm:GetParameterHistory",
             "ssm:GetParametersByPath",
             "ssm:GetParameters",
             "ssm:GetParameter"
           ],
-          "Resource": concat([
-          "arn:aws:ssm:us-east-1:633854890313:parameter/${var.env}.${var.project_name}.${var.component}.*",
-            ], var.parameters)
+          "Resource" : concat([
+            "arn:aws:ssm:us-east-1:633854890313:parameter/${var.env}.${var.project_name}.${var.component}.*",
+          ], var.parameters)
         },
         {
-          "Sid": "DescribeAllParameters",
-          "Effect": "Allow",
-          "Action": "ssm:DescribeParameters",
-          "Resource": "*"
+          "Sid" : "DescribeAllParameters",
+          "Effect" : "Allow",
+          "Action" : "ssm:DescribeParameters",
+          "Resource" : "*"
         }
       ]
-    }
-resource "aws_iam_instance_profile" "main" {
-  name = "${local.name}-role"
-  role = aws_iam_role.main.name
+    })
+  }
 }
+      resource "aws_iam_instance_profile" "main" {
+        name = "${local.name}-role"
+        role = aws_iam_role.main.name
+      }
+
+
+
 
