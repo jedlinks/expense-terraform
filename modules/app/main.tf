@@ -4,6 +4,13 @@ resource "aws_security_group" "main" {
   vpc_id      = var.vpc_id
 
   ingress {
+    from_port   = 9100
+    to_port     = 9100
+    protocol    = "tcp"
+    cidr_blocks = var.prometheus_cidrs_cidrs
+    description = "PROMETHEUS"
+  }
+  ingress {
     from_port   = 22
     to_port     = 22
     protocol    = "tcp"
